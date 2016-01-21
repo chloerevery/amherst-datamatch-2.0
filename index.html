@@ -20,8 +20,7 @@
         <br>
         <br>
             <div class="container backsplash">
-                <form method = "post" action="">
-                <form id="myForm">
+                <form data-toggle="validator" data-disable="true" id="myForm" data-toggle="validator">
                     
                     <h2 class="text-center">Amherst Datamatch</h2>
 
@@ -39,9 +38,23 @@
                     
                     <div class="row">
                         <div class="col-sm-8">
-                            <h5>Full name: <input class="participant" type="text" name="name"></h5>
-                            <h5>Amherst email: <input class="participant" type="text" name="email" placeholder = "Ex: jdoe18@amherst.edu"></h4>
-                            <h5>Phone number: (optional): <input class="participant" type="text" name="phone"></h5>
+
+                            <div class="form-group">
+                                <label for="inputName" class="control-label">Name</label>
+                                <input type="text" class="form-control" id="inputName" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputEmail" class="control-label">Amherst Email</label>
+                                <input type="email" class="form-control" id="inputEmail" placeholder="ex. bmartin16@amherst.edu" data-error="Invalid email address" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputPhone" class="control-label">Phone Number</label>
+                                <input type="text" class="form-control" id="inputPhone" placeholder="ex. 413-542-7433" required>
+                            </div>
+
                             <h5>Class:</h4>
                                 <ul style="list-style-type: none;">
                                     <li><input type="radio" name="class" value="2018" checked="checked">  2018<br></li>
@@ -138,10 +151,10 @@
                                     <li><input type="radio" name="ten" value="d">  Pure beams of light<br></li>
                                 </ul>
 
-                                
-                                    <input id="button2" type="submit" class="btn btn-default" value="Submit">
+                                <div class="form-group">
+                                    <button id="button2" type="submit" class="btn btn-default">Submit</button>
+                                </div>
                                 <br>
-
                                 <br>
 
                 </form>
@@ -151,7 +164,7 @@
                 </div> <!-- end survey div -->
 
                     <div id="completed" class="hide">
-                        <h5 class="text-center"> Congratulations!   You will receive an email on February 14th with your matches.</h5>
+                        <h5 class="text-center"> Congratulations! You will receive an email on February 14th with your matches.</h5>
                         <br>
                         
                     </div>
@@ -165,5 +178,6 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/validator.js"></script>
         </body>
 </html>
