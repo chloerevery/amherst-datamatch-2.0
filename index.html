@@ -46,13 +46,14 @@
 
                             <div class="form-group">
                                 <label for="inputEmail" class="control-label">Amherst Email</label>
-                                <input type="email" class="form-control" id="inputEmail" placeholder="ex. bmartin16@amherst.edu" data-error="Invalid email address" required>
+                                <input type="email" class="form-control" id="inputEmail" pattern="[a-z]+[1][5-9]@amherst\.edu" placeholder="ex. bmartin16@amherst.edu" data-error="Invalid email address" required>
                                 <div class="help-block with-errors"></div>
                             </div>
 
                             <div class="form-group">
                                 <label for="inputPhone" class="control-label">Phone Number</label>
-                                <input type="text" class="form-control" id="inputPhone" placeholder="ex. 413-542-7433" required>
+                                <input type="text" class="form-control" id="inputPhone" pattern="^[2-9]\d{2}-\d{3}-\d{4}$" placeholder="ex. 413-542-7433" data-error="Format xxx-xxx-xxxx required" required>
+                                <div class="help-block with-errors"></div>
                             </div>
 
                             <h5>Class:</h4>
