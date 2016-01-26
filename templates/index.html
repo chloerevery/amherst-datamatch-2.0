@@ -21,11 +21,13 @@
         <br>
         <br>
             <div class="container backsplash">
-                <form action = "/completed" method = "post" data-toggle="validator" data-disable="true" id="myForm">
+                <form action="/completed" method="post" data-toggle="validator" data-disable="true" id="myForm">
+                
+
+
                     
                     <h2 class="text-center">Amherst Datamatch</h2>
-
-                <div id="splash">
+                    <div id="splash">
                     <p>Welcome! Fill out this survey, and on Valentine's day, you'll be sent an email matching you with your top 3 true loves, based on real science!</p>
 
                     <div class="text-center">
@@ -42,18 +44,18 @@
 
                             <div class="form-group">
                                 <label for="inputName" class="control-label">Name</label>
-                                <input type="text" class="form-control" id="inputName" required>
+                                <input type="text" name="name" class="form-control" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="inputEmail" class="control-label">Amherst Email</label>
-                                <input type="email" class="form-control" id="inputEmail" pattern="[a-z]+[1][5-9]@amherst\.edu" placeholder="ex. bmartin16@amherst.edu" data-error="Invalid email address" required>
+                                <input type="email" name="email"  class="form-control" pattern="[a-z]+[1][5-9]@amherst\.edu" placeholder="ex. bmartin16@amherst.edu" data-error="Invalid email address" required>
                                 <div class="help-block with-errors"></div>
                             </div>
 
                             <div class="form-group">
                                 <label for="inputPhone" class="control-label">Phone Number</label>
-                                <input type="text" class="form-control" id="inputPhone" pattern="^[2-9]\d{2}-\d{3}-\d{4}$" placeholder="ex. 413-542-7433" data-error="Format xxx-xxx-xxxx required" required>
+                                <input type="text" name="phone" class="form-control" pattern="^[2-9]\d{2}-\d{3}-\d{4}$" placeholder="ex. 413-542-7433" data-error="Format xxx-xxx-xxxx required" required>
                                 <div class="help-block with-errors"></div>
                             </div>
 
@@ -153,10 +155,10 @@
                                     <li><input type="radio" name="ten" value="d">  Pure beams of light<br></li>
                                 </ul>
 
-                                <div class="form-group">
-                                    <button id="button2" type="submit" class="btn btn-default">Submit</button>
-                                </div>
-                                <br>     
+                               
+                                    <input id="button2" type="submit" value="Submit" class="btn btn-default"></input>
+                               
+                                <br>    
 
                 </form>
 
@@ -164,10 +166,7 @@
                     </div>
                 </div> <!-- end survey div -->
 
-                    <div id="completed" class="hide">
-                        <h5 class="text-center"> Congratulations! You will receive an email on February 14th with your matches.</h5>
-                        <br>
-                    </div>
+                  
                 
                     
          

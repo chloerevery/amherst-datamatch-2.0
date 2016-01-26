@@ -38,6 +38,7 @@ def insert_participant():
         "ten": request.form["ten"]       
         }
     participants.insert(participant)
+    return render_template('completed.html')
 
 if __name__ == '__main__':
     app.debug=True          #restarts every time you change code
