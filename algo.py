@@ -5,28 +5,38 @@ participants=db.participants
 
 #MAY NEED TO CHANGE Question names
 questions = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
-straight_male_dict = dict()
-male_ix=0
-straight_female_dict = dict()
-female_ix=0
-for m in participants.find( { 'gender' : 'man' , 'seeking':'woman' }):
-        straight_male_dict[male_ix] = m
-        male_ix+=1
-for w in participants.find( { 'gender' : 'woman' , 'seeking':'man' }):
-        straight_female_dict[female_ix]=w
-        female_ix+=1
+straight_matrix = list()
+gay_matrix = list()
+lesbian_matrix = list()
+men_seeking_nb = list()
+women_seeking_nb = list()
 
-straight_matrix = []
-for i in range(male_ix):
-        straight_matrix.append([0 for i in range(female_ix)])
-for x in range(male_ix):
-        m_entry = straight_male_dict[x]
-        for y in range(female_ix):
-                f_entry = straight_female_dict[y]
-                for q in questions:
-                        if m_entry[q]==f_entry[q]:
-                                straight_matrix[x][y]+=1
-print(straight_matrix)
+entry_dict = dict()
+entry_list = list()
+
+def makeMatrix (target_gender, seeking_gender):
+        matrix = list()
+        xdict = dict()
+        xindex=0
+        ydict = dict()
+        yindex=0
+        for x in participants.find( { 'gender' : target_gender , 'seeking': seeking_gender }):
+                xdict[xindex] = x
+                xindex+=1
+        for y in participants.find( { 'gender' : seeking_gender , 'seeking': target_gender }):
+                ydict[yindex]=y
+                yindex+=1
+
+        for i in range(xindex):
+                matrix.append([0 for i in range(yindex)])
+        for x in range(xindex):
+                x_entry = xdict[x]
+                for y in range(yindex):
+                        y_entry = ydict[y]
+                        for q in questions:
+                                if x_entry[q]==y_entry[q]:
+                                        matrix[x][y]+=1
+        return matrix
 
 def find_3best(target, num_seeking, matrix):
         best_matches = [list(), list(), list()]
@@ -47,8 +57,23 @@ def find_3best(target, num_seeking, matrix):
         best_same.append(best_matches)
         return best_same
 
+def init_matrices():
+        for entry in participants.find():
+                name = entry['name']
+                entry_dict[name]=list()
+                entry_list.append(name)
+        global straight_matrix
+        straight_matrix = makeMatrix('man', 'woman')
+        global gay_matrix
+        gay_matrix = makeMatrix('man', 'man')
+        global lesbian_matrix
+        lesbian_matrix = makeMatrix('woman', 'woman')
+        global men_seeking_nb
+        men_seeking_nb = makeMatrix('man', 'nonbinary')
+        global women_seeking_nb
+        women_seeking_nb = makeMatrix('woman', 'nonbinary')
+
 #shuffle at end
-                        
-gay_matrix=[]
-lesb_matrix=[]
-nb_matrix=[]
+
+def main():
+        init_matrices()
