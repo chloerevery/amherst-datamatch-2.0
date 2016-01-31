@@ -7,11 +7,13 @@ participants=db.participants
 QUESTIONS = ['class', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
 MATRICES = [list(), list(), list(), list(), list()]      #an list of matrices
 XY_GUIDE = [['man', 'woman'], ['man', 'man'], ['woman', 'woman'], ['man', 'nonbinary'], ['woman', 'nonbinary']]
+COORD_TO_ID = [[dict(), dict()], [dict(), dict()], [dict(), dict()], [dict(), dict()], [dict(), dict()]]
 
 entry_dict = dict()
 entry_list = list()
 
 def makeMatrix (target_gender, seeking_gender, matrix_type):
+        global COORD_TO_ID
         matrix = list()
         xdict = dict()
         xindex=0
@@ -21,12 +23,14 @@ def makeMatrix (target_gender, seeking_gender, matrix_type):
                 _id = x['_id']
                 entry_dict[_id][matrix_type] = xindex
                 entry_dict[_id]['gender']=target_gender
+                COORD_TO_ID[matrix_type][0][xindex]=_id
                 xdict[xindex] = x
                 xindex+=1
         for y in participants.find( { 'gender' : seeking_gender , target_gender: 1 }):
                 _id = y['_id']
                 entry_dict[_id][matrix_type] =yindex
                 entry_dict[_id]['gender']=seeking_gender
+                COORD_TO_ID[matrix_type][1][yindex]=_id
                 ydict[yindex]=y
                 yindex+=1
 
@@ -42,9 +46,16 @@ def makeMatrix (target_gender, seeking_gender, matrix_type):
         return matrix
 
 
-def find3best(matrix, target, num_seeking):
+def find3best(matrixnum, target, gender_combo, target_gender):
         best_matches = [list(), list(), list()]
         best_same = [0, 0, 0]
+        matrix = MATRICES[matrixnum]
+
+        num_seeking=len(matrix)
+        xOrY=0
+        if gender_combo[0]==target_gender:
+                num_seeking = len(matrix[0])
+                xOrY =1
         
         for seeking in range(num_seeking):
                 num_matches = matrix[target][seeking]
@@ -53,9 +64,10 @@ def find3best(matrix, target, num_seeking):
                                 best_same[i]=best_same[i-1]
                                 best_matches[i]= list(best_matches[i-1])
                         best_same[0] = num_matches
+                seeking_id = COORD_TO_ID[matrixnum][xOrY][seeking]
                 for num in range (3):
                         if best_same[num]==num_matches:
-                                best_matches[num].append(seeking)
+                                best_matches[num].append(seeking_id)
         best_same.append(best_matches)
         return best_same
 
@@ -81,16 +93,10 @@ def main():
                 matrixnums_to_coords = entry_dict[_id]
                 for matrixnum in range(5):
                         if matrixnum in matrixnums_to_coords:
-                                matrix = MATRICES[matrixnum]
                                 target = matrixnums_to_coords[matrixnum]
-                                num_seeking=0
                                 gender_combo = XY_GUIDE[matrixnum]
                                 target_gender = matrixnums_to_coords['gender']
-                                if gender_combo[0]==target_gender:
-                                        num_seeking = len(matrix[0])
-                                else:
-                                        num_seeking = len(matrix)
-                                matches = find3best(matrix, target, num_seeking)
+                                matches = find3best(matrixnum, target, gender_combo, target_gender)
                                 print matches
 
 main()
