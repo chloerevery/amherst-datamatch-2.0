@@ -12,7 +12,7 @@ participants=db.participants
 sg = sendgrid.SendGridClient('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')
 message = sendgrid.Mail()
 message.set_headers({'X-Sent-Using': 'SendGrid-API', 'X-Transport': 'web'});
-message.set_from('acatamatch@gmail.com')
+message.set_from('acdatamatch@gmail.com')
 message.set_from_name("Amherst Datamatch")
 message.set_replyto("acdatamatch@gmail.com")
 message.add_bcc('acdatamatch@gmail.com') #not working?
@@ -22,6 +22,7 @@ message.set_html('Hi :name,<br><br> Your matches are: <br><br> 1. :match1, :phon
 
 #get match names and emails for each entry in the database, one entry at a time
 
+emails = [] #create empty array for participant emails
 names = [] #create empty array for participant names
 
 first_matches = [] #create empty array for first matches' names
