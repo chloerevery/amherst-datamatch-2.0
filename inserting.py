@@ -62,7 +62,7 @@ def insert_participant():
         return render_template('completed.html')
 
 if __name__ == '__main__':
-    app.debug=False          #restarts every time you change code
+    app.debug=True          #restarts every time you change code
     app.run()
     
     
