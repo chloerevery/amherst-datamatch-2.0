@@ -10,7 +10,7 @@ participants=db.participants
 matches = db.matches
 
 #create email message
-sg = sendgrid.SendGridClient('PUT KEY HERE')
+sg = sendgrid.SendGridClient('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')
 message = sendgrid.Mail()
 message.set_headers({'X-Sent-Using': 'SendGrid-API', 'X-Transport': 'web'});
 message.set_from('acdatamatch@gmail.com')
@@ -19,7 +19,7 @@ message.set_replyto("acdatamatch@gmail.com")
 message.add_bcc('acdatamatch@gmail.com') #not working?
 message.set_subject(':name, Your True Love Matches!')
 #set html
-message.set_html('Hi :name,<br><br> Your matches are: <br><br> :match1 :phone1 <br>:match2 :phone2 <br>:match3 :phone3. <br><br>You\'re super compatible! Shoot them a text and hang out sometime!')
+message.set_html('Hi :name,<br><br> Your matches are: <br><br>:number1 :match1 :comma1 :phone1 <br>:number2 :match2 :comma2 :phone2 <br>:number3 :match3 :comma3 :phone3. <br><br>You\'re super compatible! Shoot them a text and hang out sometime!')
 
 #get match names and emails for each entry in the database, one entry at a time
 
@@ -33,22 +33,52 @@ third_matches = [] #create empty array for third matches' names
 first_phones = [] #create empty array for first matches' phone numbers
 second_phones = [] #create empty array for second matches' phone numbers
 third_phones = [] #create empty array for third matches' phone numbers
+
+number1, number2, number3 = [], [], []
+comma1, comma2, comma3 = [], [], []
     
 for entry in matches.find():
     print(entry['email'])
     emails.append(entry['email']) #append the participant's email to the emails array
     
     names.append(entry['name']) #append the entry's name to the names array
-
-    # a if test else b
     
-    first_matches.append("" if entry['m0']=="NaN" else entry['m0']) #append that person's first match to the first_match array
-    second_matches.append("" if entry['m1']=="NaN" else entry['m1']) #append that person's second match to the second_match array
-    third_matches.append("" if entry['m2']=="NaN" else entry['m2']) #append that person's third match to the third_match array
+    # match names
+    if entry['m0']=="NaN":
+        first_matches.append("")
+    else:
+        first_matches.append(entry['m0']) #append that person's first match to the first_match array
+        number1.append("1. ")
+        commas1.append(", ")
 
-    first_phones.append("" if entry['p0']=="NaN" else entry['p0']) #append the first match's phone number to the first_phones array
-    second_phones.append("" if entry['p1']=="NaN" else entry['p1']) #append the second match's phone number to the second_phones array
-    third_phones.append("" if entry['p2']=="NaN" else entry['p2']) #append the third match's phone number to the third_phones array
+    if entry['m1']=="NaN": 
+        second_matches.append("")
+    else:
+        second_matches.append(entry['m1']) #append that person's second match to the second_match arra
+        number2.append("2. ")
+        comma2.append(", ")
+        
+    if entry['m2']=="NaN": 
+        third_matches.append("") #append that person's third match to the third_match array
+    else:
+        third_matches.append(entry['m2'])
+        number3.append("3. ")
+        comma3.append(", ")
+
+    #phones
+    if entry['p0']=="NaN": 
+        first_matches.append("")
+    else:
+        first_matches.append(entry['p0']) #append that person's first match's number to the first_phones array
+    if entry['p1']=="NaN": 
+        second_matches.append("") #append that person's second match's number to the second_phones array
+    else:
+        second_matches.append(entry['p1'])
+    if entry['p2']=="NaN": 
+        third_matches.append("") #append that person's third match's number to the third_phones array
+    else:
+        third_matches.append(entry['p2'])
+ 
 
 print("first_matches: ")
 print(first_matches)
@@ -64,7 +94,13 @@ message.set_substitutions({':name': names,
                            ':match3': third_matches,
                            ':phone1': first_phones,
                            ':phone2': second_phones,
-                           ':phone3': third_phones
+                           ':phone3': third_phones,
+                           ':number1': number1,
+                           ':number2': number2,
+                           ':number3': number3,
+                           ':comma1': comma1,
+                           ':comma2': comma2,
+                           ':comma3': comma3
                            })
 
 #send that wildebeast!
