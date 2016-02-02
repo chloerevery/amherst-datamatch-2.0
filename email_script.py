@@ -12,12 +12,8 @@ participants = db.test
 matches = db.testmatches
 
 #create email message
-<<<<<<< Updated upstream
-sg = sendgrid.SendGridClient('')
-=======
 sg = sendgrid.SendGridClient('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')
 
->>>>>>> Stashed changes
 message = sendgrid.Mail()
 message.set_headers({'X-Sent-Using': 'SendGrid-API', 'X-Transport': 'web'});
 message.set_from('acdatamatch@gmail.com')
@@ -56,7 +52,7 @@ for entry in matches.find():
     else:
         first_matches.append(entry['m0']) #append that person's first match to the first_match array
         number1.append("1. ")
-        commas1.append(", ")
+        comma1.append(", ")
 
     if entry['m1']=="NaN": 
         second_matches.append("")
