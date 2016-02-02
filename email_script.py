@@ -35,6 +35,7 @@ second_phones = [] #create empty array for second matches' phone numbers
 third_phones = [] #create empty array for third matches' phone numbers
     
 for entry in matches.find():
+    print(entry['email'])
     emails.append(entry['email']) #append the participant's email to the emails array
     
     names.append(entry['name']) #append the entry's name to the names array
@@ -49,14 +50,18 @@ for entry in matches.find():
     second_phones.append("" if entry['p1']=="NaN" else entry['p1']) #append the second match's phone number to the second_phones array
     third_phones.append("" if entry['p2']=="NaN" else entry['p2']) #append the third match's phone number to the third_phones array
 
+print("first_matches: ")
+print(first_matches)
+print("first_phones: ")
+print(first_phones)
 #set 'send to'
 message.smtpapi.add_to(emails)
 
 #set the substitutions for the email template
 message.set_substitutions({':name': names,
-                           ':match1': "1. ", first_matches, ", "
-                           ':match2': "2. ", second_matches, ", "
-                           ':match3': "3. ", third_matches, ", "
+                           ':match1': first_matches,
+                           ':match2': second_matches,
+                           ':match3': third_matches,
                            ':phone1': first_phones,
                            ':phone2': second_phones,
                            ':phone3': third_phones
