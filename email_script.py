@@ -6,11 +6,18 @@ from smtpapi import SMTPAPIHeader
 from pymongo import MongoClient
 client=MongoClient('localhost', 27017)
 db=client.amherst_datamatch
-participants=db.participants
-matches = db.matches
+##participants=db.participants
+##matches = db.matches
+participants = db.test
+matches = db.testmatches
 
 #create email message
+<<<<<<< Updated upstream
 sg = sendgrid.SendGridClient('')
+=======
+sg = sendgrid.SendGridClient('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')
+
+>>>>>>> Stashed changes
 message = sendgrid.Mail()
 message.set_headers({'X-Sent-Using': 'SendGrid-API', 'X-Transport': 'web'});
 message.set_from('acdatamatch@gmail.com')

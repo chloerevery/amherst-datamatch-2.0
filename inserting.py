@@ -4,6 +4,7 @@ from pymongo import MongoClient
 client=MongoClient('localhost', 27017)
 db=client.amherst_datamatch
 participants=db.participants
+##participants=db.test
 
 # creates the application
 app = Flask(__name__)

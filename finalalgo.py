@@ -4,6 +4,8 @@ client=MongoClient('localhost', 27017)
 db=client.amherst_datamatch
 participants=db.participants
 dbmatches = db.matches
+##participants = db.test
+##dbmatches = db.testmatches
 
 #MAY NEED TO CHANGE Question names
 QUESTIONS = ['class', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
@@ -41,7 +43,7 @@ class Heap(object):
                 second_child_ix = 2*pos+1
 
                 if first_child_ix==self.count: #heap has one child
-                        if self.heap[pos]>self.heap[first_child_ix]:
+                        if self.heap[pos]<self.heap[first_child_ix]:
                                 self.swap(pos, first_child_ix)
                 elif first_child_ix<self.count:
                         biggest = second_child_ix
@@ -56,6 +58,8 @@ class Heap(object):
                         return -1
                 result = self.heap[1]
                 self.heap[1]=self.heap[self.count]
+                print "new top is ", self.heap[1]
+                self.heap[self.count]=0
                 self.count-=1
                 self.sift_down(1)
                 return result
@@ -96,7 +100,6 @@ def makeMatrix (target_gender, seeking_gender, matrix_type):
 
 def frommatrix_toheap(matrixnum, target, gender_combo, target_gender, heap):
         matrix = MATRICES[matrixnum]
-        print "matrix is", matrix
         
         num_seeking=0
         if gender_combo[0]==target_gender:
@@ -155,8 +158,11 @@ def put_in_database(_id, matches):
                         "m2": match_dict[m2][0],
                         "p2":  match_dict[m2][1]
                         }
-                dbmatches.insert(person)
-                
+                #dbmatches.insert(person)
+
+def heap_print(heap):
+        for ix in range (len(heap)):
+                print heap[ix]
 
 #shuffle at end
 def main():
@@ -174,13 +180,16 @@ def main():
                                 gender_combo = XY_GUIDE[matrixnum]
                                 target_gender = matrixnums_to_coords['gender']
                                 heap = frommatrix_toheap(matrixnum, target, gender_combo, target_gender, heap)
-                #print "for ", _id
+                print _id
+                heap_print(heap.heap)
                 ix = 0
                 num = heap.remove_max()
                 final_matches = list()
                 #ENSURE MATCHES ARE TWO WAY?
-                print _id
                 while ix<3 and num!=-1:
+                        if _id=="woman18":
+                                heap_print(heap.heap)
+                        
                         matches = heap.match_dict[num]
                         print num, " : ", matches
                         
@@ -192,8 +201,8 @@ def main():
                                                 ix+=1
                         else:
                                 final_matches.append(matches[0])
+                                ix+=1
                         num = heap.remove_max()
-                        ix+=1
                         
                 slack = 3-len(final_matches)
                 print "slack is", slack
