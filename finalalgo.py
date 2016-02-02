@@ -96,7 +96,8 @@ def makeMatrix (target_gender, seeking_gender, matrix_type):
 
 def frommatrix_toheap(matrixnum, target, gender_combo, target_gender, heap):
         matrix = MATRICES[matrixnum]
-
+        print "matrix is", matrix
+        
         num_seeking=0
         if gender_combo[0]==target_gender:
                 num_seeking = len(matrix[0])
@@ -141,7 +142,6 @@ def put_in_database(_id, matches):
         
         for entry in participants.find( { '_id': _id } ):
                 m0= matches[0]
-                print m0
                 m1 = matches[1]
                 m2 = matches[2]
                 person = {
@@ -179,9 +179,10 @@ def main():
                 num = heap.remove_max()
                 final_matches = list()
                 #ENSURE MATCHES ARE TWO WAY?
+                print _id
                 while ix<3 and num!=-1:
                         matches = heap.match_dict[num]
-                        #print num, " : ", matches
+                        print num, " : ", matches
                         
                         if len(matches) >1:
                                 random.shuffle(matches)
@@ -195,6 +196,7 @@ def main():
                         ix+=1
                         
                 slack = 3-len(final_matches)
+                print "slack is", slack
                 for i in range(slack):
                         final_matches.append("NaN")
                 put_in_database(_id, final_matches)
