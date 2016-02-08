@@ -5,3 +5,12 @@
 .hide {
 	display: none;
 }
+
+.logo {
+	margin: 0 auto;
+	text-align: center;
+	height: auto;
+	width: auto;
+	max-height: 100px;
+	max-width: 100px;
+}
