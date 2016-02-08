@@ -6,14 +6,11 @@ from smtpapi import SMTPAPIHeader
 from pymongo import MongoClient
 client=MongoClient('localhost', 27017)
 db=client.amherst_datamatch
-##participants=db.participants
-##matches = db.matches
-participants = db.test
-matches = db.testmatches
+participants=db.participants
+matches = db.matches
 
 #create email message
-sg = sendgrid.SendGridClient('')
-
+sg = sendgrid.SendGridClient('<key here>')
 message = sendgrid.Mail()
 message.set_headers({'X-Sent-Using': 'SendGrid-API', 'X-Transport': 'web'});
 message.set_from('acdatamatch@gmail.com')
@@ -22,20 +19,15 @@ message.set_replyto("acdatamatch@gmail.com")
 message.add_bcc('acdatamatch@gmail.com') #not working?
 message.set_subject(':name, Your True Love Matches!')
 #set html
-message.set_html('Hi :name,<br><br> Your matches are: <br><br>:number1 :match1 :comma1 :phone1 <br>:number2 :match2 :comma2 :phone2 <br>:number3 :match3 :comma3 :phone3. <br><br>You\'re super compatible! Shoot them a text and hang out sometime!')
+message.set_html('Hi :name,<br><br> Your matches are: <br><br>:number1 :match1 :comma1 :phone1 <br>:number2 :match2 :comma2 :phone2 <br>:number3 :match3 :comma3 :phone3 <br><br>You\'re super compatible! Shoot them a text and hang out sometime!')
 
 #get match names and emails for each entry in the database, one entry at a time
 
 emails = [] #create empty array for participant emails
 names = [] #create empty array for participant names
 
-first_matches = [] #create empty array for first matches' names
-second_matches = [] #create empty array for second matches' names
-third_matches = [] #create empty array for third matches' names
-
-first_phones = [] #create empty array for first matches' phone numbers
-second_phones = [] #create empty array for second matches' phone numbers
-third_phones = [] #create empty array for third matches' phone numbers
+match1, match2, match3 = [], [], []
+phone1, phone2, phone3 = [], [], []
 
 number1, number2, number3 = [], [], []
 comma1, comma2, comma3 = [], [], []
@@ -48,56 +40,58 @@ for entry in matches.find():
     
     # match names
     if entry['m0']=="NaN":
-        first_matches.append("")
+        match1.append("")
     else:
-        first_matches.append(entry['m0']) #append that person's first match to the first_match array
+        match1.append(entry['m0']) #append that person's first match to the first_match array
         number1.append("1. ")
-        comma1.append(", ")
+        commas1.append(", ")
 
     if entry['m1']=="NaN": 
-        second_matches.append("")
+        match2.append("")
     else:
-        second_matches.append(entry['m1']) #append that person's second match to the second_match arra
+        match2.append(entry['m1']) #append that person's second match to the second_match arra
         number2.append("2. ")
         comma2.append(", ")
         
     if entry['m2']=="NaN": 
-        third_matches.append("") #append that person's third match to the third_match array
+        match3.append("") #append that person's third match to the third_match array
     else:
-        third_matches.append(entry['m2'])
+        match3.append(entry['m2'])
         number3.append("3. ")
         comma3.append(", ")
 
     #phones
     if entry['p0']=="NaN": 
-        first_matches.append("")
+        phone1.append("")
     else:
-        first_matches.append(entry['p0']) #append that person's first match's number to the first_phones array
+        phone1.append(entry['p0']) #append that person's first match's number to the first_phones array
+        
     if entry['p1']=="NaN": 
-        second_matches.append("") #append that person's second match's number to the second_phones array
+        phone2.append("") #append that person's second match's number to the second_phones array
     else:
-        second_matches.append(entry['p1'])
+        phone2.append(entry['p1'])
+        
     if entry['p2']=="NaN": 
-        third_matches.append("") #append that person's third match's number to the third_phones array
+        phone3.append("") #append that person's third match's number to the third_phones array
     else:
-        third_matches.append(entry['p2'])
+        phone3.append(entry['p2'])
  
 
-print("first_matches: ")
-print(first_matches)
-print("first_phones: ")
-print(first_phones)
+print("match1: ")
+print(match1
+print("phone1: ")
+print(phone1)
 #set 'send to'
 message.smtpapi.add_to(emails)
 
 #set the substitutions for the email template
 message.set_substitutions({':name': names,
-                           ':match1': first_matches,
-                           ':match2': second_matches,
-                           ':match3': third_matches,
-                           ':phone1': first_phones,
-                           ':phone2': second_phones,
-                           ':phone3': third_phones,
+                           ':match1': match1,
+                           ':match2': match2,
+                           ':match3': match3,
+                           ':phone1': phone1,
+                           ':phone2': phone2,
+                           ':phone3': phone3,
                            ':number1': number1,
                            ':number2': number2,
                            ':number3': number3,
