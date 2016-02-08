@@ -3,8 +3,8 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 from pymongo import MongoClient
 client=MongoClient('localhost', 27017)
 db=client.amherst_datamatch
-participants=db.participants
-##participants=db.test
+##participants=db.participants
+participants=db.test
 
 # creates the application
 app = Flask(__name__)

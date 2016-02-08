@@ -2,10 +2,10 @@ from pymongo import MongoClient
 import random
 client=MongoClient('localhost', 27017)
 db=client.amherst_datamatch
-participants=db.participants
-dbmatches = db.matches
-##participants = db.test
-##dbmatches = db.testmatches
+##participants=db.participants
+##dbmatches = db.matches
+participants = db.test
+dbmatches = db.testmatches
 
 #MAY NEED TO CHANGE Question names
 QUESTIONS = ['class', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
@@ -158,7 +158,7 @@ def put_in_database(_id, matches):
                         "m2": match_dict[m2][0],
                         "p2":  match_dict[m2][1]
                         }
-                #dbmatches.insert(person)
+                dbmatches.insert(person)
 
 def heap_print(heap):
         for ix in range (len(heap)):
