@@ -14,3 +14,7 @@
 	max-height: 100px;
 	max-width: 100px;
 }
+
+#big {
+	font-size: 3em;
+}
