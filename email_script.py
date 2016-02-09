@@ -11,7 +11,7 @@ participants=db.participants
 matches = db.testmatches
 
 #create email message
-sg = sendgrid.SendGridClient('<Insert Key Here>')
+sg = sendgrid.SendGridClient('Insert Key Here')
 message = sendgrid.Mail()
 message.set_headers({'X-Sent-Using': 'SendGrid-API', 'X-Transport': 'web'});
 message.set_from('acdatamatch@gmail.com')

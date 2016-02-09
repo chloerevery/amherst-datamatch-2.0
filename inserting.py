@@ -11,8 +11,6 @@ app = Flask(__name__)
 #app.config.from_object(__name__)
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
-users=set()
-
 @app.route('/')
 def starting_page():
     return render_template('index.html')
@@ -23,20 +21,16 @@ def insert_participant():
     email= request.form['email']
     id_end = len(email)-12
     _id= email[0:id_end]
-    if _id in users:
-        return render_template('index.html')
-    else:
-        users.add(_id)
-        seeking_man=0
-        seeking_woman=0
-        seeking_nonbinary=0
-        seeking = request.form.getlist('seeking')
-        if "0" in seeking:
-            seeking_man=1
-        if "1" in seeking:
-            seeking_woman=1
-        if "2" in seeking:
-            seeking_nonbinary=1
+    seeking_man=0
+    seeking_woman=0
+    seeking_nonbinary=0
+    seeking = request.form.getlist('seeking')
+    if "0" in seeking:
+        seeking_man=1
+    if "1" in seeking:
+        seeking_woman=1
+    if "2" in seeking:
+        seeking_nonbinary=1
                 
         participant = {
             "_id" : _id,
@@ -57,7 +51,10 @@ def insert_participant():
             "seven": request.form["seven"],
             "eight": request.form["eight"],
             "nine": request.form["nine"],
-            "ten": request.form["ten"]       
+            "ten": request.form["ten"],
+            "eleven": request.form["eleven"],
+            "twelve": request.form["twelve"],
+            "thirteen": request.form["thirteen"]
             }
         participants.insert(participant)
         return render_template('completed.html')

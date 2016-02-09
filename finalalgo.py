@@ -8,7 +8,7 @@ participants = db.test
 dbmatches = db.testmatches
 
 #MAY NEED TO CHANGE Question names
-QUESTIONS = ['class', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
+QUESTIONS = ['class', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen']
 MATRICES = [list(), list(), list(), list(), list(), list()]      #an list of matrices
 XY_GUIDE = [['man', 'woman'], ['man', 'man'], ['woman', 'woman'], ['man', 'nonbinary'], ['woman', 'nonbinary'], ['nonbinary', 'nonbinary']]
 COORD_TO_ID = [[dict(), dict()], [dict(), dict()], [dict(), dict()], [dict(), dict()], [dict(), dict()], [dict(), dict()]]
@@ -28,7 +28,7 @@ class Heap(object):
                 
         def sift_up(self, pos):
                 if pos>1:
-                        parent = pos/2
+                        parent = int(pos/2)
                         if self.heap[pos]>self.heap[parent]:
                                 self.swap(pos, parent)
                                 self.sift_up(parent)
@@ -58,7 +58,6 @@ class Heap(object):
                         return -1
                 result = self.heap[1]
                 self.heap[1]=self.heap[self.count]
-                print "new top is ", self.heap[1]
                 self.heap[self.count]=0
                 self.count-=1
                 self.sift_down(1)
@@ -161,9 +160,9 @@ def put_in_database(_id, matches):
                         }
                 dbmatches.insert(person)
 
-def heap_print(heap):
-        for ix in range (len(heap)):
-                print heap[ix]
+##def heap_print(heap):
+##        for ix in range (len(heap)):
+##                print heap[ix]
 
 #shuffle at end
 def main():
@@ -181,15 +180,13 @@ def main():
                                 gender_combo = XY_GUIDE[matrixnum]
                                 target_gender = matrixnums_to_coords['gender']
                                 heap = frommatrix_toheap(matrixnum, target, _id, gender_combo, target_gender, heap)
-                print _id
-                heap_print(heap.heap)
+
                 ix = 0
                 num = heap.remove_max()
                 final_matches = list()
                 #ensure matches are two way?
                 while ix<3 and num!=-1:                        
                         matches = heap.match_dict[num]
-                        print num, " : ", matches
                         
                         if len(matches) >1:
                                 random.shuffle(matches)
@@ -203,7 +200,6 @@ def main():
                         num = heap.remove_max()
                         
                 slack = 3-len(final_matches)
-                print "slack is", slack
                 for i in range(slack):
                         final_matches.append("NaN")
                 put_in_database(_id, final_matches)
