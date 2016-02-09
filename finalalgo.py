@@ -9,9 +9,9 @@ dbmatches = db.testmatches
 
 #MAY NEED TO CHANGE Question names
 QUESTIONS = ['class', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
-MATRICES = [list(), list(), list(), list(), list()]      #an list of matrices
-XY_GUIDE = [['man', 'woman'], ['man', 'man'], ['woman', 'woman'], ['man', 'nonbinary'], ['woman', 'nonbinary']]
-COORD_TO_ID = [[dict(), dict()], [dict(), dict()], [dict(), dict()], [dict(), dict()], [dict(), dict()]]
+MATRICES = [list(), list(), list(), list(), list(), list()]      #an list of matrices
+XY_GUIDE = [['man', 'woman'], ['man', 'man'], ['woman', 'woman'], ['man', 'nonbinary'], ['woman', 'nonbinary'], ['nonbinary', 'nonbinary']]
+COORD_TO_ID = [[dict(), dict()], [dict(), dict()], [dict(), dict()], [dict(), dict()], [dict(), dict()], [dict(), dict()]]
 
 entry_dict = dict()
 entry_list = list()
@@ -98,7 +98,7 @@ def makeMatrix (target_gender, seeking_gender, matrix_type):
         return matrix
 
 
-def frommatrix_toheap(matrixnum, target, gender_combo, target_gender, heap):
+def frommatrix_toheap(matrixnum, target, target_id, gender_combo, target_gender, heap):
         matrix = MATRICES[matrixnum]
         
         num_seeking=0
@@ -115,11 +115,12 @@ def frommatrix_toheap(matrixnum, target, gender_combo, target_gender, heap):
                 else:
                         num_matches = matrix[seeking][target]
                 seeking_id = COORD_TO_ID[matrixnum][xOrY][seeking]
-                if num_matches in heap.match_dict:
-                        heap.match_dict[num_matches].append(seeking_id)
-                else:
-                       heap.match_dict[num_matches] = [seeking_id]
-                       heap.insert(num_matches)
+                if seeking_id!=target_id:
+                        if num_matches in heap.match_dict:
+                                heap.match_dict[num_matches].append(seeking_id)
+                        else:
+                               heap.match_dict[num_matches] = [seeking_id]
+                               heap.insert(num_matches)
         return heap
 
 def init_matrices():
@@ -129,7 +130,7 @@ def init_matrices():
                 name = entry['_id']
                 entry_dict[name]=dict()
                 entry_list.append(name)
-        for i in range(5):
+        for i in range(6):
                 MATRICES[i]=makeMatrix(XY_GUIDE[i][0], XY_GUIDE[i][1], i)
 
 def put_in_database(_id, matches):
@@ -174,22 +175,19 @@ def main():
         for _id in entry_list:
                 heap = Heap(0, dict(), [0])
                 matrixnums_to_coords = entry_dict[_id]
-                for matrixnum in range(5):
+                for matrixnum in range(6):
                         if matrixnum in matrixnums_to_coords:
                                 target = matrixnums_to_coords[matrixnum]
                                 gender_combo = XY_GUIDE[matrixnum]
                                 target_gender = matrixnums_to_coords['gender']
-                                heap = frommatrix_toheap(matrixnum, target, gender_combo, target_gender, heap)
+                                heap = frommatrix_toheap(matrixnum, target, _id, gender_combo, target_gender, heap)
                 print _id
                 heap_print(heap.heap)
                 ix = 0
                 num = heap.remove_max()
                 final_matches = list()
-                #ENSURE MATCHES ARE TWO WAY?
-                while ix<3 and num!=-1:
-                        if _id=="woman18":
-                                heap_print(heap.heap)
-                        
+                #ensure matches are two way?
+                while ix<3 and num!=-1:                        
                         matches = heap.match_dict[num]
                         print num, " : ", matches
                         
