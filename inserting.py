@@ -17,7 +17,6 @@ def starting_page():
 
 @app.route('/completed', methods = ['POST'])
 def insert_participant():
-    global users
     email= request.form['email']
     id_end = len(email)-12
     _id= email[0:id_end]
@@ -31,33 +30,33 @@ def insert_participant():
         seeking_woman=1
     if "2" in seeking:
         seeking_nonbinary=1
-                
-        participant = {
-            "_id" : _id,
-            "name": request.form['name'],
-            "email":request.form['email'],
-            "phone":request.form['phone'],
-            "class": request.form['class'],
-            "gender":request.form['gender'],
-            "man": seeking_man,
-            "woman": seeking_woman,
-            "nonbinary": seeking_nonbinary,
-            "one": request.form["one"],
-            "two": request.form["two"],
-            "three": request.form["three"],
-            "four": request.form["four"],
-            "five": request.form["five"],
-            "six": request.form["six"],
-            "seven": request.form["seven"],
-            "eight": request.form["eight"],
-            "nine": request.form["nine"],
-            "ten": request.form["ten"],
-            "eleven": request.form["eleven"],
-            "twelve": request.form["twelve"],
-            "thirteen": request.form["thirteen"]
-            }
-        participants.insert(participant)
-        return render_template('completed.html')
+        
+    participant = {
+        "_id" : _id,
+        "name": request.form['name'],
+        "email":request.form['email'],
+        "phone":request.form['phone'],
+        "class": request.form['class'],
+        "gender":request.form['gender'],
+        "man": seeking_man,
+        "woman": seeking_woman,
+        "nonbinary": seeking_nonbinary,
+        "one": request.form["one"],
+        "two": request.form["two"],
+        "three": request.form["three"],
+        "four": request.form["four"],
+        "five": request.form["five"],
+        "six": request.form["six"],
+        "seven": request.form["seven"],
+        "eight": request.form["eight"],
+        "nine": request.form["nine"],
+        "ten": request.form["ten"],
+        "eleven": request.form["eleven"],
+        "twelve": request.form["twelve"],
+        "thirteen": request.form["thirteen"]
+        }
+    participants.insert(participant)
+    return render_template('completed.html')
 
 if __name__ == '__main__':
     app.debug=True          #restarts every time you change code
